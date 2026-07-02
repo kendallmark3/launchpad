@@ -1,0 +1,37 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Node (implementation language not yet decided; ignored preemptively)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Python (implementation language not yet decided; ignored preemptively)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Logs and local scratch
+*.log
+.DS_Store
+/tmp/
+
+# Feature Launchpad generated run artifacts (per intent.md Section 7) — generated per-run,
+# not committed source. Remove this line once a real retention policy is decided.
+generated/feature-launchpad/launchpad-run-log.json
