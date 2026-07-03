@@ -32,6 +32,5 @@ venv/
 .DS_Store
 /tmp/
 
-# Feature Launchpad generated run artifacts (per intent.md Section 7) — generated per-run,
-# not committed source. Remove this line once a real retention policy is decided.
-generated/feature-launchpad/launchpad-run-log.json
+# Note: generated/ (Feature Launchpad run output) is intentionally NOT ignored —
+# intent.md Section 4 requires all generated artifacts to be committed to the repo.

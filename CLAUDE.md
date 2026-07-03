@@ -5,10 +5,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Repository state
 
 This repository holds a product/design spec for a tool called the "Feature Launchpad"
-(`intent.md`), plus standard repo scaffolding (license, changelog, contribution/security/conduct
-policies, issue/PR templates, a markdown-lint CI workflow). **No implementation exists yet**:
-there is no source code, package manifest, build system, linter, or test suite for the launchpad
-itself. There is nothing to build or unit-test — the only CI is markdown linting.
+(`intent.md`), standard repo scaffolding (license, changelog, contribution/security/conduct
+policies, issue/PR templates, a markdown-lint CI workflow), and a **first implementation pass**:
+`feature_launchpad/`, a stdlib-only Python package implementing Stages 1-3 of the spec (see
+"Workflow stages defined so far" below). Stages 4+ (Figma generation, code scaffolding, validation,
+PR creation) are **not implemented** — the spec itself doesn't define them (see the truncation note
+below). Tests live in `tests/` (stdlib `unittest`, run via `python3 -m unittest discover -s tests`).
+There is no build step and no non-Python CI beyond markdown linting.
 
 Note: `intent.md` was originally pasted from a chat UI and has since had its formatting cleaned up
 (curly quotes, chat-markup artifacts, doubled blank lines removed) — content and wording are
@@ -17,9 +20,24 @@ truncation note at the end of that file). Stages beyond Stage 3, and the final s
 spec, are missing from the source of truth. Confirm with the user before assuming any unstated
 stage/output details.
 
-Versioning: the `VERSION` file and `CHANGELOG.md` currently track the *spec and scaffolding*, not
-shipped code — there's no code to version yet. Bump them for spec changes too, not just
-implementation work.
+Versioning: `VERSION` and `CHANGELOG.md` track both the spec/scaffolding and the implementation.
+Bump them for spec changes too, not just implementation work.
+
+Implementation notes and decisions the code had to make where the spec is ambiguous:
+
+- **Language:** Python (spec allows Node.js or Python; user chose Python for this pass).
+- **API calls:** direct HTTP via `urllib` (stdlib), per the "no SDK-heavy abstraction layers"
+  constraint — deliberately not using the official `anthropic` Python SDK.
+- **Required env vars:** only `ANTHROPIC_API_KEY` is enforced today, since Stages 2-3 are the only
+  implemented stages that need credentials. `FIGMA_*`/`GITHUB_*` will need to be added to the
+  required-var check once the stages that use them are implemented — don't assume they're already
+  enforced.
+- **Output layout:** `generated/feature-launchpad/<feature-name>/` — this resolves (for the
+  implementation) the two-different-layouts ambiguity noted below, by following the more granular
+  numbered list from Section 7 rather than Section 2's tree.
+- **Stage 3 schema:** since the spec's JSON schema is truncated after `"featureName"`, the prompt
+  asks the model to record its own schema assumptions in a `_assumptions` field rather than the
+  code asserting an undocumented schema as authoritative.
 
 ## What the spec describes
 
