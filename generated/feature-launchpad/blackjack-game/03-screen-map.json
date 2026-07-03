@@ -1,0 +1,241 @@
+{
+  "featureName": "blackjack-game",
+  "_assumptions": [
+    "Each screen object includes 'name', 'purpose', 'state', and 'components' fields",
+    "Components are described as objects with 'type', 'label', and 'behavior' fields where applicable",
+    "Screen 'state' field captures the different modes/phases a screen can be in",
+    "Transitions between screens/states are implicit based on user actions and game logic",
+    "Visual styling and layout specifics are out of scope for this screen map",
+    "Component 'behavior' describes interaction patterns and state changes, not implementation details",
+    "Conditional components (e.g., Insurance, Split) are listed with their availability constraints",
+    "All screens assume client-side rendering with no server calls",
+    "Local storage persistence is handled at the application level, not per-screen",
+    "Error handling UI is inferred from functional constraints where not explicitly specified",
+    "The 'Betting Panel' is treated as a state of the main Table screen rather than a separate screen",
+    "Strategy Hint is a toggle component that modifies display state rather than a separate screen",
+    "Stats Panel is treated as an overlay/modal accessible from the main Table screen",
+    "Chip denominations and exact button labels are implementation details left unspecified"
+  ],
+  "screens": [
+    {
+      "name": "Table / Play Screen",
+      "purpose": "Primary game interface where all betting, dealing, player actions, and round resolution occur",
+      "state": [
+        "betting_phase",
+        "deal_phase",
+        "insurance_decision_phase",
+        "player_action_phase",
+        "dealer_play_phase",
+        "resolution_phase"
+      ],
+      "components": [
+        {
+          "type": "display",
+          "label": "Bankroll Display",
+          "behavior": "Shows current chip total, updates after each round resolution"
+        },
+        {
+          "type": "display",
+          "label": "Shoe Indicator",
+          "behavior": "Shows cards remaining or proximity to reshuffle threshold (~25%)"
+        },
+        {
+          "type": "container",
+          "label": "Dealer Hand Area",
+          "behavior": "Displays dealer cards (one face-down during player turn), hand total (hidden until dealer plays), updates during dealer play phase"
+        },
+        {
+          "type": "container",
+          "label": "Player Hand Area",
+          "behavior": "Displays player card(s), hand total with soft/hard indicator, supports multiple hands when split"
+        },
+        {
+          "type": "panel",
+          "label": "Betting Panel",
+          "behavior": "Active during betting_phase; contains chip selector, current bet display, and confirm button; disabled after bet confirmed",
+          "subcomponents": [
+            {
+              "type": "control",
+              "label": "Chip Selector",
+              "behavior": "Allows player to select chip denominations to build bet amount"
+            },
+            {
+              "type": "display",
+              "label": "Current Bet Amount",
+              "behavior": "Shows total bet being placed, updates as chips selected"
+            },
+            {
+              "type": "button",
+              "label": "Confirm Bet / Deal",
+              "behavior": "Validates bet <= bankroll, transitions to deal_phase, disabled if bet invalid or zero"
+            }
+          ]
+        },
+        {
+          "type": "button",
+          "label": "Hit",
+          "behavior": "Active during player_action_phase, deals one additional card to current hand, recalculates total, checks for bust"
+        },
+        {
+          "type": "button",
+          "label": "Stand",
+          "behavior": "Active during player_action_phase, ends player action on current hand, advances to next split hand or dealer_play_phase"
+        },
+        {
+          "type": "button",
+          "label": "Double Down",
+          "behavior": "Active only on first action of a hand, only if bankroll >= current bet; doubles bet, deals exactly one card, automatically stands"
+        },
+        {
+          "type": "button",
+          "label": "Split",
+          "behavior": "Active only on first action when two cards are a pair and bankroll >= current bet; creates two hands, places equal bet on second hand, deals one card to each"
+        },
+        {
+          "type": "prompt",
+          "label": "Insurance Offer",
+          "behavior": "Appears in insurance_decision_phase when dealer shows Ace; allows player to bet up to half original bet; accept/decline buttons; pays 2:1 if dealer has blackjack"
+        },
+        {
+          "type": "toggle",
+          "label": "Strategy Hint",
+          "behavior": "Available during player_action_phase; when enabled, displays recommended action (Hit/Stand/Double/Split) per basic strategy for current hand vs dealer up-card"
+        },
+        {
+          "type": "button",
+          "label": "Open Stats",
+          "behavior": "Opens Stats Panel overlay/modal at any time"
+        }
+      ]
+    },
+    {
+      "name": "Round Result Overlay",
+      "purpose": "Displays outcome of completed round and prompts player to continue",
+      "state": [
+        "win",
+        "loss",
+        "push",
+        "blackjack",
+        "bust"
+      ],
+      "components": [
+        {
+          "type": "display",
+          "label": "Outcome Message",
+          "behavior": "Shows result text: 'You Win!', 'You Lose', 'Push', 'Blackjack!', or 'Bust'"
+        },
+        {
+          "type": "display",
+          "label": "Payout Amount",
+          "behavior": "Shows chips won/lost or 'Bet Returned' for push; blackjack pays 3:2, regular win pays 1:1"
+        },
+        {
+          "type": "display",
+          "label": "Updated Bankroll",
+          "behavior": "Shows new bankroll total after payout applied"
+        },
+        {
+          "type": "button",
+          "label": "Play Again",
+          "behavior": "Dismisses overlay, resets table to betting_phase, clears hands, preserves bankroll and updated stats"
+        }
+      ]
+    },
+    {
+      "name": "Stats Panel",
+      "purpose": "Displays session statistics and provides bankroll reset control",
+      "state": [
+        "open",
+        "closed"
+      ],
+      "components": [
+        {
+          "type": "display",
+          "label": "Hands Played",
+          "behavior": "Shows total count of completed hands in current session"
+        },
+        {
+          "type": "display",
+          "label": "Wins",
+          "behavior": "Shows count of won hands (including blackjack)"
+        },
+        {
+          "type": "display",
+          "label": "Losses",
+          "behavior": "Shows count of lost hands"
+        },
+        {
+          "type": "display",
+          "label": "Pushes",
+          "behavior": "Shows count of push outcomes"
+        },
+        {
+          "type": "display",
+          "label": "Win Rate",
+          "behavior": "Shows percentage calculated from session results"
+        },
+        {
+          "type": "display",
+          "label": "Current Streak",
+          "behavior": "Shows consecutive wins or losses (exact streak logic unspecified)"
+        },
+        {
+          "type": "display",
+          "label": "Biggest Single-Hand Win",
+          "behavior": "Shows largest payout amount from any single hand in session"
+        },
+        {
+          "type": "button",
+          "label": "Reset Bankroll / Stats",
+          "behavior": "Clears all stats to zero, resets bankroll to starting amount (e.g., 1000), updates local storage; confirmation dialog unspecified"
+        },
+        {
+          "type": "button",
+          "label": "Close",
+          "behavior": "Dismisses Stats Panel, returns focus to Table / Play Screen"
+        }
+      ]
+    }
+  ],
+  "globalBehaviors": [
+    {
+      "behavior": "Local Storage Persistence",
+      "description": "Bankroll and session stats persist across page reloads via browser local storage; no server-side storage"
+    },
+    {
+      "behavior": "Shoe Management",
+      "description": "6-deck shoe reshuffles automatically when cards remaining drop below ~25%; reshuffle occurs between hands, never mid-hand"
+    },
+    {
+      "behavior": "Bankroll Validation",
+      "description": "All bet-related actions (initial bet, double down, split, insurance) validate that player has sufficient bankroll; insufficient funds disable respective controls"
+    },
+    {
+      "behavior": "Dealer Fixed Strategy",
+      "description": "Dealer automatically hits until reaching hard 17 or any 17+, stands on soft 17; no player input during dealer play phase"
+    },
+    {
+      "behavior": "Hand Value Calculation",
+      "description": "Automatic calculation of hand totals with soft/hard detection (ace counted as 11 when possible without busting); bust detection at total > 21"
+    },
+    {
+      "behavior": "Responsive Animations",
+      "description": "Card dealing and flipping use short, non-blocking animations; no artificial delays that harm responsiveness"
+    }
+  ],
+  "unspecifiedBehaviors": [
+    "Exact chip denominations available in Chip Selector",
+    "Whether Betting Panel is inline or a distinct modal",
+    "Whether Round Result Overlay is dismissible by clicking outside or only via Play Again button",
+    "Whether Stats Panel is a sidebar, collapsible panel, or modal",
+    "UI behavior when bankroll reaches zero (game over state vs. auto-reset vs. manual reset prompt)",
+    "Whether bankroll/stats reset requires a confirmation dialog",
+    "Error messaging for insufficient bankroll during bet placement",
+    "Whether dealer reveals hole card when all player hands bust",
+    "How split hands are counted in session stats (one hand or two hands played)",
+    "Exact win rate calculation formula (wins/total vs. wins/(wins+losses))",
+    "Whether pushes break win/loss streaks",
+    "Fallback behavior if local storage is unavailable or fails",
+    "Visual treatment of Strategy Hint recommendation display"
+  ]
+}

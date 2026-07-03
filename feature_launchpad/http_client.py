@@ -10,12 +10,36 @@ import urllib.error
 import urllib.request
 
 API_URL = "https://api.anthropic.com/v1/messages"
+MODELS_URL = "https://api.anthropic.com/v1/models"
 API_VERSION = "2023-06-01"
 DEFAULT_MODEL = "claude-sonnet-4-5"  # the default named in intent.md Section 5's own example
 
 
 class AnthropicAPIError(RuntimeError):
     pass
+
+
+def check_reachability(*, timeout: float = 5.0) -> bool:
+    """Return True if the Anthropic API is reachable with the configured key.
+
+    Uses GET /v1/models rather than /v1/messages so a status check never spends
+    tokens. Returns False (rather than raising) for any connectivity, auth, or
+    HTTP-level failure — callers only need reachable/unreachable, not the reason.
+    """
+    api_key = os.environ.get("ANTHROPIC_API_KEY")
+    if not api_key:
+        return False
+
+    request = urllib.request.Request(
+        MODELS_URL,
+        method="GET",
+        headers={"x-api-key": api_key, "anthropic-version": API_VERSION},
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            return response.status == 200
+    except (urllib.error.HTTPError, urllib.error.URLError, OSError):
+        return False
 
 
 def create_message(prompt: str, *, max_tokens: int = 4096) -> str:

@@ -14,7 +14,10 @@ jobs:
       - name: Lint markdown files
         uses: DavidAnson/markdownlint-cli2-action@v19
         with:
-          globs: "**/*.md"
+          globs: |
+            **/*.md
+            !**/node_modules/**
+            !generated/**
 
       - name: Check for broken relative links
         uses: gaurav-nelson/github-action-markdown-link-check@v1

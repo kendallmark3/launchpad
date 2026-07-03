@@ -35,13 +35,13 @@ A developer should be able to run one Claude Code workflow and produce:
 
 The target experience:
 
-```
+```bash
 /feature-launchpad ./intents/customer-billing.intent.md
 ```
 
 The result:
 
-```
+```text
 feature/customer-billing-dashboard
 ├── generated/
 │   ├── ux-flow.md
@@ -91,7 +91,7 @@ Required constraints:
 
 The launchpad must read the following environment variables:
 
-```
+```text
 ANTHROPIC_API_KEY=...
 FIGMA_ACCESS_TOKEN=...
 FIGMA_FILE_KEY=...
@@ -102,7 +102,7 @@ GITHUB_REPOSITORY=owner/repo
 
 Optional:
 
-```
+```text
 FIGMA_PARENT_NODE_ID=...
 DEFAULT_BRANCH=main
 ANTHROPIC_MODEL=claude-sonnet-4-5
@@ -117,13 +117,13 @@ The workflow accepts a single feature intent file.
 
 Example:
 
-```
+```bash
 /feature-launchpad ./intents/customer-billing-dashboard.intent.md
 ```
 
 The input intent file must include:
 
-```
+```markdown
 # Feature Intent
 
 ## Business Goal
@@ -156,7 +156,7 @@ enough information exists to safely create a draft.
 
 The launchpad must create the following files:
 
-```
+```text
 generated/feature-launchpad/
 ├── 01-normalized-intent.md
 ├── 02-ux-flow.md

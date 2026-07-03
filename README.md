@@ -1,13 +1,13 @@
 # Launchpad
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE)
-[![Version](https://img.shields.io/badge/version-0.2.0-informational.svg)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.4.0-informational.svg)](./CHANGELOG.md)
 [![Status: Stages 1-3 implemented](https://img.shields.io/badge/status-stages%201--3%20implemented-brightgreen.svg)](./CLAUDE.md)
 
 An automated **feature launchpad**: every feature starts from structured intent and comes out the
 other end as a developer-reviewable pull request.
 
-```
+```text
 intent in → Figma artifact out → Claude/API reasoning → scaffolded code → validation evidence → PR
 ```
 
@@ -41,7 +41,7 @@ python3 -m unittest discover -s tests -v
 
 ## Target experience (not yet fully implemented)
 
-```
+```bash
 /feature-launchpad ./intents/customer-billing.intent.md
 ```
 
@@ -50,6 +50,14 @@ artifacts (UX flow, screen map, Figma payload, implementation plan, validation r
 alongside the actual code and test changes. Today's CLI produces the first three generated
 artifacts only, on the current branch — branch/PR automation is part of the unimplemented Stages
 4+.
+
+## Example: an intent taken all the way to a working app
+
+Since Stages 4+ don't exist yet, [`blackjack-game/`](./blackjack-game/) is a hand-written (not
+pipeline-generated) implementation of [`intents/blackjack-game.intent.md`](./intents/blackjack-game.intent.md),
+built from that intent's Stage 1-3 output. It's a standalone client-only Vite + React app — see
+`blackjack-game/README.md` to run it. This shows what a Stage 4+ code-scaffolding step would need
+to produce, without claiming the pipeline actually does this yet.
 
 ## Core principle
 
@@ -66,6 +74,10 @@ Version one is meant to be simple, local, and dependency-light: no orchestration
 cloud deployment. Just direct HTTP calls to the Anthropic and Figma APIs, using each language's
 standard library wherever possible. Every run happens on a new feature branch, and existing source
 is never overwritten without a backup or diff.
+
+The one exception is an optional, read-only status dashboard (`python3 -m feature_launchpad.dashboard`,
+see `USER_MANUAL.md`) — a static HTML snapshot, not a running server, that shows environment health
+and current tool capabilities. The pipeline itself still needs no server and no web UI.
 
 ## Reading more
 

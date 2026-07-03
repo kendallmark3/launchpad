@@ -1,0 +1,8 @@
+{
+  // Rule config lives in .markdownlint.jsonc; this file only scopes which
+  // files markdownlint-cli2 looks at, so local runs (e.g. `npx
+  // markdownlint-cli2 "**/*.md" --fix`) match what CI actually lints
+  // (.github/workflows/lint.yml) instead of also crawling installed
+  // dependencies and AI-generated pipeline output.
+  "ignores": ["**/node_modules/**", "generated/**"]
+}

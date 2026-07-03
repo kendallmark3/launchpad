@@ -10,8 +10,10 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from feature_launchpad import env, intent_parser, screen_map, ux_flow
+from feature_launchpad import env, intent_parser, registry, screen_map, ux_flow
 from feature_launchpad.http_client import AnthropicAPIError
+
+STAGE_1, STAGE_2, STAGE_3 = (stage["id"] for stage in registry.STAGES[:3])
 
 # intent.md Section 5 lists ANTHROPIC_API_KEY, FIGMA_ACCESS_TOKEN, FIGMA_FILE_KEY,
 # FIGMA_TEAM_ID, GITHUB_TOKEN, and GITHUB_REPOSITORY as required. Only
@@ -80,10 +82,10 @@ def main(argv=None) -> int:
         )
 
     (run_dir / "01-normalized-intent.md").write_text(normalized.content, encoding="utf-8")
-    record_stage("01-normalized-intent", "completed")
+    record_stage(STAGE_1, "completed")
     if normalized.missing_sections:
         record_stage(
-            "01-normalized-intent",
+            STAGE_1,
             "warning",
             f"Missing optional sections: {', '.join(normalized.missing_sections)}",
         )
@@ -92,25 +94,25 @@ def main(argv=None) -> int:
     try:
         flow = ux_flow.generate(normalized.content)
     except AnthropicAPIError as exc:
-        record_stage("02-ux-flow", "failed", str(exc))
+        record_stage(STAGE_2, "failed", str(exc))
         _write_run_log(run_dir, run_log)
         print(f"feature-launchpad: Stage 2 (UX flow) failed: {exc}", file=sys.stderr)
         return 1
 
     (run_dir / "02-ux-flow.md").write_text(flow, encoding="utf-8")
-    record_stage("02-ux-flow", "completed")
+    record_stage(STAGE_2, "completed")
     print(f"[2/3] Wrote {run_dir / '02-ux-flow.md'}")
 
     try:
         screens = screen_map.generate(normalized.content, flow)
     except (AnthropicAPIError, json.JSONDecodeError) as exc:
-        record_stage("03-screen-map", "failed", str(exc))
+        record_stage(STAGE_3, "failed", str(exc))
         _write_run_log(run_dir, run_log)
         print(f"feature-launchpad: Stage 3 (screen map) failed: {exc}", file=sys.stderr)
         return 1
 
     (run_dir / "03-screen-map.json").write_text(json.dumps(screens, indent=2) + "\n", encoding="utf-8")
-    record_stage("03-screen-map", "completed")
+    record_stage(STAGE_3, "completed")
     print(f"[3/3] Wrote {run_dir / '03-screen-map.json'}")
 
     run_log["completedAt"] = datetime.now(timezone.utc).isoformat()
