@@ -44,7 +44,7 @@ Implementation notes and decisions the code had to make where the spec is ambigu
 `intent.md` specifies an automated pipeline, invoked as a single command, that turns a structured
 "feature intent" markdown file into a developer-reviewable pull request:
 
-```sh
+```bash
 /feature-launchpad ./intents/customer-billing.intent.md
 ```
 

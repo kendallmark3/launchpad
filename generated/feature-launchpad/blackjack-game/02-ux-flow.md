@@ -83,11 +83,13 @@ User navigates directly to the game URL in their browser. The Table / Play Scree
 ## Decision points
 
 ### 1. Insurance decision
+
 - **Trigger:** Dealer shows Ace
 - **Options:** Accept (bet up to half original bet) or Decline
 - **Outcome:** If accepted and dealer has blackjack, insurance pays 2:1; otherwise insurance bet is lost
 
 ### 2. Player action selection
+
 - **Trigger:** Player's turn after deal
 - **Options:**
   - Hit (take another card)
@@ -100,11 +102,13 @@ User navigates directly to the game URL in their browser. The Table / Play Scree
   - Split aces receive one card each and cannot hit again
 
 ### 3. Strategy Hint toggle
+
 - **Trigger:** Player toggles Strategy Hint on
 - **Outcome:** System displays recommended action (Hit/Stand/Double/Split) based on basic strategy for current hand vs. dealer up-card
 - **Note:** Available during player action phase; does not auto-play
 
 ### 4. Bankroll reset
+
 - **Trigger:** Player clicks reset control in Stats Panel
 - **Outcome:** Bankroll resets to starting amount (e.g. 1000), all session stats clear
 - **Note:** Intent does not specify a confirmation dialog; see Confirmation states section
@@ -114,6 +118,7 @@ User navigates directly to the game URL in their browser. The Table / Play Scree
 ## Alternate paths
 
 ### Path A: Player splits a pair
+
 1. Player receives pair (e.g. two 8s)
 2. Split button becomes available
 3. Player clicks Split
@@ -128,6 +133,7 @@ User navigates directly to the game URL in their browser. The Table / Play Scree
 **Constraint from intent:** "up to one split per hand" — no re-splitting.
 
 ### Path B: Player doubles down
+
 1. Player acts on initial two-card hand
 2. Double button available (if bankroll sufficient)
 3. Player clicks Double
@@ -138,6 +144,7 @@ User navigates directly to the game URL in their browser. The Table / Play Scree
 8. Hand resolves with doubled payout/loss
 
 ### Path C: Player busts
+
 1. Player hits and hand total exceeds 21
 2. Hand marked as bust
 3. Player loses bet immediately
@@ -148,6 +155,7 @@ User navigates directly to the game URL in their browser. The Table / Play Scree
 **Intent ambiguity:** Does dealer reveal hole card if all player hands bust? Not specified.
 
 ### Path D: Dealer has blackjack (with insurance offered)
+
 1. Dealer shows Ace
 2. Insurance offered
 3. Player accepts or declines
@@ -157,12 +165,14 @@ User navigates directly to the game URL in their browser. The Table / Play Scree
 7. Round ends, no player actions occur
 
 ### Path E: Both player and dealer have blackjack
+
 1. Both dealt blackjack on initial deal
 2. Result: Push
 3. Original bet returned
 4. No 3:2 payout
 
 ### Path F: Shoe reshuffle
+
 1. After a hand completes, shoe drops below ~25% of cards remaining
 2. Shoe automatically reshuffles (all 6 decks)
 3. Shoe indicator updates
@@ -170,6 +180,7 @@ User navigates directly to the game URL in their browser. The Table / Play Scree
 5. **Note:** Reshuffle happens between hands, not mid-hand
 
 ### Path G: Player bankroll reaches zero
+
 1. Player loses final bet
 2. Bankroll = 0
 3. **Intent does not specify:** What happens next?
@@ -184,13 +195,16 @@ User navigates directly to the game URL in their browser. The Table / Play Scree
 ## Empty states
 
 ### 1. Start of session (first visit)
+
 - **Bankroll:** Default starting amount (e.g. 1000 chips)
 - **Stats panel:** All stats at zero (hands played: 0, wins: 0, losses: 0, pushes: 0, win rate: —, streak: 0, biggest win: 0)
 - **Table:** No cards, no bet, betting panel active
 
 ### 2. Bankroll depleted
+
 **Intent does not specify empty state handling when bankroll = 0.**  
 Possible interpretations (not specified):
+
 - Betting panel disabled, prompt to reset bankroll
 - Automatic bankroll reset
 - Game over message
@@ -198,6 +212,7 @@ Possible interpretations (not specified):
 **Unspecified.**
 
 ### 3. No prior session stats (cleared local storage)
+
 - Same as first visit
 - Stats panel shows zeros/defaults
 
@@ -208,6 +223,7 @@ Possible interpretations (not specified):
 **Intent does not explicitly enumerate error states.** Inferred from constraints:
 
 ### 1. Insufficient bankroll for bet
+
 - **Trigger:** Player attempts to confirm bet > current bankroll
 - **Behavior (not specified):** Likely one of:
   - Bet confirmation button disabled until bet ≤ bankroll
@@ -217,24 +233,28 @@ Possible interpretations (not specified):
 **Unspecified.**
 
 ### 2. Insufficient bankroll for Double Down
+
 - **Trigger:** Player clicks Double when bankroll < current bet amount
 - **Behavior (not specified):** Likely Double button is disabled preemptively
 
 **Unspecified.**
 
 ### 3. Insufficient bankroll for Split
+
 - **Trigger:** Player clicks Split when bankroll < current bet amount
 - **Behavior (not specified):** Likely Split button is disabled preemptively
 
 **Unspecified.**
 
 ### 4. Insufficient bankroll for Insurance
+
 - **Trigger:** Player attempts insurance bet > available bankroll or > half original bet
 - **Behavior:** Not specified
 
 **Unspecified.**
 
 ### 5. Local storage failure
+
 - **Trigger:** Browser blocks local storage, or storage quota exceeded
 - **Behavior:** Not specified; stats/bankroll persistence fails
 - **Fallback:** Not specified (session-only stats? error message?)
@@ -242,6 +262,7 @@ Possible interpretations (not specified):
 **Unspecified.**
 
 ### 6. Game state corruption
+
 - **Trigger:** Invalid state due to implementation bug (e.g. hand total miscalculation)
 - **Behavior:** Not specified
 
@@ -254,16 +275,19 @@ Possible interpretations (not specified):
 **Intent does not specify confirmation dialogs.** Inferred likely confirmations:
 
 ### 1. Bet confirmation
+
 - **Trigger:** Player finishes selecting chips
 - **UI (not specified):** Likely a "Confirm Bet" or "Deal" button
 - **Visual feedback:** Button state change, bet locked in
 
 ### 2. Insurance acceptance
+
 - **Trigger:** Player chooses to take insurance
 - **UI (not specified):** Accept/Decline buttons or similar
 - **Feedback:** Insurance bet amount displays, deducts from bankroll
 
 ### 3. Bankroll/stats reset
+
 - **Intent does not specify whether reset requires confirmation.**  
 Recommended (but unspecified): Confirmation dialog to prevent accidental reset.
 
@@ -274,6 +298,7 @@ Recommended (but unspecified): Confirmation dialog to prevent accidental reset.
 ## Success states
 
 ### 1. Round win
+
 - **Round Result Overlay displays:**
   - "You Win!" or similar message
   - Payout amount (original bet × 1)
@@ -287,6 +312,7 @@ Recommended (but unspecified): Confirmation dialog to prevent accidental reset.
   - Biggest win updates if this payout > previous record
 
 ### 2. Blackjack win
+
 - **Round Result Overlay displays:**
   - "Blackjack!" or similar message
   - Payout amount (original bet × 1.5, i.e. 3:2)
@@ -295,6 +321,7 @@ Recommended (but unspecified): Confirmation dialog to prevent accidental reset.
 - **Stats update:** Same as regular win, with higher payout
 
 ### 3. Push
+
 - **Round Result Overlay displays:**
   - "Push" or "Tie" message
   - Original bet returned (no profit/loss)
@@ -306,12 +333,14 @@ Recommended (but unspecified): Confirmation dialog to prevent accidental reset.
   - Streak resets (not specified whether push breaks streak; assumed yes)
 
 ### 4. Insurance win (dealer has blackjack, player took insurance)
+
 - **Insurance bet pays 2:1**
 - **If player also has blackjack:** push on main bet + insurance win = net profit from insurance
 - **If player does not have blackjack:** main bet lost, insurance win offsets half the loss
 - **Display (not specified):** Likely separate or combined message showing insurance payout
 
 ### 5. Successful split hand resolution
+
 - **Each split hand resolves independently**
 - **Round Result Overlay (not specified):** May show combined result or per-hand result
 - **Stats (not specified):** Likely counts as one hand played, with outcome based on net result across both hands
@@ -319,11 +348,13 @@ Recommended (but unspecified): Confirmation dialog to prevent accidental reset.
 **Unspecified how split hands affect stats (one hand or two?).**
 
 ### 6. Successful Double Down win
+
 - **Payout:** (original bet × 2) × 1 = 2× profit on win
 - **Display:** Round Result Overlay shows doubled payout
 - **Stats:** Same as regular win
 
 ### 7. Bankroll/stats reset success
+
 - **Trigger:** Player confirms reset (if confirmation exists)
 - **Outcome:**
   - Bankroll resets to starting amount
@@ -338,9 +369,11 @@ Recommended (but unspecified): Confirmation dialog to prevent accidental reset.
 **Based on intent "Screens" section:**
 
 ### 1. Table / Play Screen
+
 **Primary screen; always visible.**
 
 **Must display:**
+
 - Dealer hand area (cards, total)
 - Player hand area(s) (cards, total, soft/hard indicator)
 - Shoe indicator (cards remaining or reshuffle threshold)
@@ -356,44 +389,53 @@ Recommended (but unspecified): Confirmation dialog to prevent accidental reset.
 - Access to Stats Panel (button/icon/tab)
 
 **States of this screen:**
+
 - **Betting phase:** Bet controls active, action buttons hidden/disabled
 - **Play phase:** Bet controls disabled, action buttons visible/active based on game state
 - **Dealer play phase:** All player controls disabled, dealer hand animates
 - **Resolution phase:** Overlaid by Round Result, or inline result display (not specified)
 
 ### 2. Betting Screen/Panel
+
 **Intent lists this as a separate screen, but also describes it as part of Table / Play Screen.**
 
 **Interpretation:** Likely a panel/section within the Table / Play Screen, active during betting phase.
 
 **Must display:**
+
 - Chip selection controls (denominations not specified)
 - Current bet amount
 - Confirm button (label not specified: "Confirm Bet," "Deal," etc.)
 
 **State transitions:**
+
 - Active when round begins or after "Play Again"
 - Disabled/hidden once bet confirmed and cards dealt
 
 ### 3. Round Result Overlay
+
 **Appears after round resolves.**
 
 **Must display:**
+
 - Outcome message (Win / Loss / Push / Blackjack / Bust)
 - Payout amount (or loss amount, or "Bet Returned" for push)
 - Updated bankroll
 - "Play Again" button (or equivalent to start next round)
 
 **Behavior (not specified):**
+
 - Modal overlay, or inline message?
 - Dismissible by clicking outside, or only via "Play Again"?
 
 **Unspecified.**
 
 ### 4. Stats Panel
+
 **Accessible from Table / Play Screen.**
 
 **Must display:**
+
 - Hands played (total count)
 - Win rate (percentage; formula not specified: wins / hands, or wins / (wins + losses)?)
 - Current streak (type not specified: win streak? win/loss streak? pushed hands break streak?)
@@ -404,6 +446,7 @@ Recommended (but unspecified): Confirmation dialog to prevent accidental reset.
 - Reset-bankroll control (button)
 
 **Behavior (not specified):**
+
 - Always visible sidebar?
 - Collapsible panel?
 - Modal opened by button?
@@ -415,25 +458,30 @@ Recommended (but unspecified): Confirmation dialog to prevent accidental reset.
 ## Screen transitions
 
 ### 1. Load → Table / Play Screen (Betting Phase)
+
 - **Trigger:** User navigates to game URL
 - **Transition:** Immediate load (no splash screen specified)
 - **State:** Betting panel active, bankroll and stats loaded from local storage (or defaults)
 
 ### 2. Betting Phase → Deal Phase
+
 - **Trigger:** Player confirms bet
 - **Transition (not specified):** Likely brief animation as cards deal
 - **State:** Bet controls disable, cards appear, action buttons enable
 
 ### 3. Deal Phase → Insurance Prompt (conditional)
+
 - **Trigger:** Dealer up-card is Ace
 - **Transition:** Insurance prompt appears (modal? inline?)
 - **State:** Player actions paused until insurance decision made
 
 ### 4. Deal Phase / Insurance → Player Action Phase
+
 - **Trigger:** Insurance resolved or skipped
 - **Transition:** Action buttons activate
 - **State:** Player can select Hit/Stand/Double/Split
 
 ### 5. Player Action Phase → Dealer Play Phase
+
 - **Trigger:** Player stands, busts, or completes all split hands
 - **Transition (not specified):** Likely brief

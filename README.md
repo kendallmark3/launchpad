@@ -41,7 +41,7 @@ python3 -m unittest discover -s tests -v
 
 ## Target experience (not yet fully implemented)
 
-```sh
+```bash
 /feature-launchpad ./intents/customer-billing.intent.md
 ```
 
