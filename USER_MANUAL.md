@@ -57,7 +57,7 @@ output folder and branch-style naming.
 It needs these `##` sections (see `intents/customer-billing.intent.md` in this repo for a full
 worked example):
 
-```
+```markdown
 # Feature Intent
 
 ## Business Goal
@@ -92,7 +92,7 @@ python3 -m feature_launchpad ./intents/my-feature.intent.md
 
 You'll see progress printed as each stage completes:
 
-```
+```text
 [1/3] Wrote generated/feature-launchpad/my-feature/01-normalized-intent.md
 [2/3] Wrote generated/feature-launchpad/my-feature/02-ux-flow.md
 [3/3] Wrote generated/feature-launchpad/my-feature/03-screen-map.json

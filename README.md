@@ -7,7 +7,7 @@
 An automated **feature launchpad**: every feature starts from structured intent and comes out the
 other end as a developer-reviewable pull request.
 
-```
+```text
 intent in → Figma artifact out → Claude/API reasoning → scaffolded code → validation evidence → PR
 ```
 
@@ -41,7 +41,7 @@ python3 -m unittest discover -s tests -v
 
 ## Target experience (not yet fully implemented)
 
-```
+```sh
 /feature-launchpad ./intents/customer-billing.intent.md
 ```
 

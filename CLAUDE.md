@@ -44,7 +44,7 @@ Implementation notes and decisions the code had to make where the spec is ambigu
 `intent.md` specifies an automated pipeline, invoked as a single command, that turns a structured
 "feature intent" markdown file into a developer-reviewable pull request:
 
-```
+```sh
 /feature-launchpad ./intents/customer-billing.intent.md
 ```
 
@@ -82,7 +82,7 @@ These are explicit, load-bearing requirements from the spec — respect them if/
 
 A run against an intent file is expected to produce a feature branch containing:
 
-```
+```text
 feature/<feature-name>/
 ├── generated/
 │   ├── ux-flow.md
