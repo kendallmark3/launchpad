@@ -1,0 +1,25 @@
+{
+  "featureName": "blackjack-game",
+  "startedAt": "2026-07-03T22:35:01.316038+00:00",
+  "stages": [
+    {
+      "stage": "01-normalized-intent",
+      "status": "completed",
+      "detail": "",
+      "at": "2026-07-03T22:35:01.316270+00:00"
+    },
+    {
+      "stage": "02-ux-flow",
+      "status": "completed",
+      "detail": "",
+      "at": "2026-07-03T22:36:36.571676+00:00"
+    },
+    {
+      "stage": "03-screen-map",
+      "status": "completed",
+      "detail": "",
+      "at": "2026-07-03T22:37:23.929611+00:00"
+    }
+  ],
+  "completedAt": "2026-07-03T22:37:23.929726+00:00"
+}

@@ -1,0 +1,25 @@
+{
+  "featureName": "launchpad-status-dashboard",
+  "startedAt": "2026-07-03T16:58:07.395381+00:00",
+  "stages": [
+    {
+      "stage": "01-normalized-intent",
+      "status": "completed",
+      "detail": "",
+      "at": "2026-07-03T16:58:07.395633+00:00"
+    },
+    {
+      "stage": "02-ux-flow",
+      "status": "completed",
+      "detail": "",
+      "at": "2026-07-03T16:59:16.048468+00:00"
+    },
+    {
+      "stage": "03-screen-map",
+      "status": "completed",
+      "detail": "",
+      "at": "2026-07-03T17:00:09.969456+00:00"
+    }
+  ],
+  "completedAt": "2026-07-03T17:00:09.969525+00:00"
+}

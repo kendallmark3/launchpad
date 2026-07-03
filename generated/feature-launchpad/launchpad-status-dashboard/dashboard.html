@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Feature Launchpad — Status Dashboard</title>
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    max-width: 760px; margin: 2.5rem auto; padding: 0 1.5rem;
+    line-height: 1.5; color: #1a1a1a; background: #fff;
+  }
+  h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+  h2 { font-size: 1.1rem; margin-top: 2.5rem; border-bottom: 1px solid #ddd; padding-bottom: 0.4rem; }
+  .meta { color: #666; font-size: 0.85rem; }
+  table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; }
+  td { padding: 0.5rem 0.4rem; border-bottom: 1px solid #eee; vertical-align: top; font-size: 0.92rem; }
+  code { background: #f4f4f4; padding: 0.1rem 0.35rem; border-radius: 3px; font-size: 0.88em; }
+  .muted { color: #777; font-size: 0.85rem; }
+  .badge { display: inline-block; padding: 0.15rem 0.55rem; border-radius: 999px; font-size: 0.78rem; font-weight: 600; white-space: nowrap; }
+  .badge-ok { background: #d9f2e3; color: #146c3a; }
+  .badge-fail { background: #fbdada; color: #a01515; }
+  .badge-unknown { background: #efefef; color: #666; }
+  .banner { padding: 0.75rem 1rem; border-radius: 6px; margin-top: 1rem; font-size: 0.92rem; }
+  .banner-ok { background: #d9f2e3; color: #146c3a; }
+  .banner-warn { background: #fdf3d0; color: #7a5b00; }
+  ul { padding-left: 1.2rem; }
+  li { margin-bottom: 0.6rem; }
+  .info { font-size: 0.85rem; color: #666; background: #f7f7f7; padding: 0.6rem 0.9rem; border-radius: 6px; margin-top: 1rem; }
+  @media (prefers-color-scheme: dark) {
+    body { background: #16181d; color: #e6e6e6; }
+    h2 { border-color: #333; }
+    td { border-color: #2a2a2a; }
+    code { background: #262933; }
+    .info { background: #1f2229; }
+  }
+</style>
+</head>
+<body>
+<h1>Feature Launchpad — Status Dashboard</h1>
+<p class="meta">Generated 2026-07-03T17:07:27.659333+00:00 · tool version 0.3.0
+· static snapshot, not live — re-run <code>python3 -m feature_launchpad.dashboard</code> to refresh</p>
+
+<h2>Health Check</h2>
+<div class="banner banner-ok">Environment configured correctly — ready to run feature-launchpad.</div>
+<table>
+<tr><td><strong>Environment variable</strong></td><td><strong>Required</strong></td><td><strong>Status</strong></td></tr>
+<tr><td><code>ANTHROPIC_API_KEY</code></td><td>required</td><td><span class="badge badge-ok">&#10003; OK</span></td></tr>
+<tr><td><code>FIGMA_ACCESS_TOKEN</code></td><td>optional, future</td><td><span class="badge badge-unknown">Not set (not yet required)</span></td></tr>
+<tr><td><code>FIGMA_FILE_KEY</code></td><td>optional, future</td><td><span class="badge badge-unknown">Not set (not yet required)</span></td></tr>
+<tr><td><code>FIGMA_TEAM_ID</code></td><td>optional, future</td><td><span class="badge badge-unknown">Not set (not yet required)</span></td></tr>
+<tr><td><code>GITHUB_TOKEN</code></td><td>optional, future</td><td><span class="badge badge-unknown">Not set (not yet required)</span></td></tr>
+<tr><td><code>GITHUB_REPOSITORY</code></td><td>optional, future</td><td><span class="badge badge-unknown">Not set (not yet required)</span></td></tr>
+<tr><td>Anthropic API connectivity</td><td>—</td><td><span class="badge badge-ok">&#10003; OK</span></td></tr>
+</table>
+
+<h2>Capabilities</h2>
+<p class="muted">CLI commands</p>
+<ul>
+<li><code>feature-launchpad &lt;intent-file&gt;</code><br><span class="muted">Runs Stages 1-3 of the pipeline against an intent file, writing artifacts to generated/feature-launchpad/&lt;feature-name&gt;/.</span></li>
+<li><code>feature-launchpad &lt;intent-file&gt; --output-root &lt;dir&gt;</code><br><span class="muted">Same as above, writing artifacts under a different output directory.</span></li>
+<li><code>python3 -m feature_launchpad.dashboard</code><br><span class="muted">Writes a static, read-only status dashboard (env var / API reachability / capabilities) and opens it in a browser.</span></li>
+</ul>
+<p class="muted">Pipeline stages</p>
+<table>
+<tr><td><strong>Stage</strong></td><td><strong>Description</strong></td><td><strong>Status</strong></td></tr>
+<tr><td>Stage 1 — Read and Normalize Intent</td><td>Parses an intent file into a normalized field list. No API call.</td><td><span class="badge badge-ok">implemented</span></td></tr>
+<tr><td>Stage 2 — Reason About UX Flow</td><td>Calls the Anthropic API to produce a UX flow write-up.</td><td><span class="badge badge-ok">implemented</span></td></tr>
+<tr><td>Stage 3 — Create Screen Map</td><td>Calls the Anthropic API to produce a JSON screen map.</td><td><span class="badge badge-ok">implemented</span></td></tr>
+<tr><td>Stage 4 — Figma Generation</td><td>Not implemented — the source spec is truncated before this stage is defined.</td><td><span class="badge badge-unknown">not yet implemented</span></td></tr>
+<tr><td>Stage 5 — Implementation Scaffolding</td><td>Not implemented — the source spec is truncated before this stage is defined.</td><td><span class="badge badge-unknown">not yet implemented</span></td></tr>
+<tr><td>Stage 6 — Validation</td><td>Not implemented — the source spec is truncated before this stage is defined.</td><td><span class="badge badge-unknown">not yet implemented</span></td></tr>
+<tr><td>Stage 7 — PR Creation</td><td>Not implemented — the source spec is truncated before this stage is defined.</td><td><span class="badge badge-unknown">not yet implemented</span></td></tr>
+</table>
+<div class="info">This dashboard is read-only. To generate an intent file or run the pipeline, use the CLI — see the Documentation links below.</div>
+
+<h2>Documentation</h2>
+<ul>
+<li><a href="../../../README.md">README.md</a></li>
+<li><a href="../../../USER_MANUAL.md">USER_MANUAL.md</a></li>
+</ul>
+</body>
+</html>

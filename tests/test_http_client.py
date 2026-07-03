@@ -105,5 +105,42 @@ class CreateMessageTests(unittest.TestCase):
                 http_client.create_message("a prompt")
 
 
+class CheckReachabilityTests(unittest.TestCase):
+    def test_returns_false_when_api_key_missing(self):
+        with mock.patch.dict(os.environ, {}, clear=True), mock.patch("urllib.request.urlopen") as urlopen:
+            self.assertFalse(http_client.check_reachability())
+        urlopen.assert_not_called()
+
+    def test_returns_true_on_200(self):
+        response = mock.MagicMock()
+        response.status = 200
+        response.__enter__.return_value = response
+        response.__exit__.return_value = False
+        with mock.patch.dict(os.environ, {"ANTHROPIC_API_KEY": "test-key"}, clear=True), mock.patch(
+            "urllib.request.urlopen", return_value=response
+        ) as urlopen:
+            self.assertTrue(http_client.check_reachability())
+
+        request = urlopen.call_args[0][0]
+        self.assertEqual(request.get_method(), "GET")
+        self.assertEqual(request.full_url, http_client.MODELS_URL)
+        self.assertEqual(request.get_header("X-api-key"), "test-key")
+
+    def test_returns_false_on_http_error(self):
+        http_error = urllib.error.HTTPError(
+            url=http_client.MODELS_URL, code=401, msg="Unauthorized", hdrs=None, fp=io.BytesIO(b"")
+        )
+        with mock.patch.dict(os.environ, {"ANTHROPIC_API_KEY": "bad-key"}, clear=True), mock.patch(
+            "urllib.request.urlopen", side_effect=http_error
+        ):
+            self.assertFalse(http_client.check_reachability())
+
+    def test_returns_false_on_url_error(self):
+        with mock.patch.dict(os.environ, {"ANTHROPIC_API_KEY": "test-key"}, clear=True), mock.patch(
+            "urllib.request.urlopen", side_effect=urllib.error.URLError("connection refused")
+        ):
+            self.assertFalse(http_client.check_reachability())
+
+
 if __name__ == "__main__":
     unittest.main()
