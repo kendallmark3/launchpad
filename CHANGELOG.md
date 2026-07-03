@@ -20,5 +20,5 @@ implementation yet, versions currently track the **specification**, not shipped 
   policy, issue/PR templates, and standard project metadata files.
 - Cleaned up `intent.md` formatting (removed chat-paste artifacts; content and wording unchanged).
 
-[Unreleased]: https://github.com/markkendall/launchpad/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/markkendall/launchpad/releases/tag/v0.1.0
+[Unreleased]: https://github.com/kendallmark3/launchpad/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/kendallmark3/launchpad/releases/tag/v0.1.0

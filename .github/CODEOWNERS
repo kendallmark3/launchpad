@@ -1,8 +1,4 @@
 # Code owners for this repository.
 # See https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
-#
-# Replace the placeholder below with real GitHub usernames/teams before relying on this file —
-# GitHub silently ignores CODEOWNERS entries that don't resolve to a valid user/team with repo
-# access, so an unverified placeholder here would give a false sense of review coverage.
 
-* @markkendall
+* @kendallmark3
