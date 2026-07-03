@@ -9,7 +9,11 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Nothing yet.
+- Unit tests for the remaining untested modules: `tests/test_http_client.py` (request
+  construction, default/env-var model selection, refusal/HTTP-error/URL-error handling),
+  `tests/test_ux_flow.py`, and `tests/test_screen_map.py` (including the fenced-code-block
+  stripping and JSON-decode-error paths in Stage 3). All Stage 1-3 modules now have direct test
+  coverage.
 
 ## [0.2.0] - 2026-07-03
 

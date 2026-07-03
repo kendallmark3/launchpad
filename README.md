@@ -69,6 +69,8 @@ is never overwritten without a backup or diff.
 
 ## Reading more
 
+- [`USER_MANUAL.md`](./USER_MANUAL.md) — step-by-step guide to running the CLI today: setup, writing
+  an intent file, reading the output, and troubleshooting.
 - [`intent.md`](./intent.md) — the original (partial) spec: mission, required env vars, input intent
   file format, output artifacts, and workflow stages.
 - [`CLAUDE.md`](./CLAUDE.md) — guidance for Claude Code sessions working in this repo, including
