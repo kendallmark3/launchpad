@@ -20,32 +20,11 @@ import webbrowser
 from datetime import datetime, timezone
 from pathlib import Path
 
-from feature_launchpad import http_client, registry
+from feature_launchpad import env_info, http_client, registry
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-REQUIRED_ENV_VARS = ("ANTHROPIC_API_KEY",)
-FUTURE_ENV_VARS = (
-    "FIGMA_ACCESS_TOKEN",
-    "FIGMA_FILE_KEY",
-    "FIGMA_TEAM_ID",
-    "GITHUB_TOKEN",
-    "GITHUB_REPOSITORY",
-)
+REPO_ROOT = env_info.REPO_ROOT
 DOC_FILES = ("README.md", "USER_MANUAL.md")
 DEFAULT_OUTPUT = REPO_ROOT / "generated" / "feature-launchpad" / "launchpad-status-dashboard" / "dashboard.html"
-
-
-def _env_var_status(names, required):
-    import os
-
-    return [{"name": name, "set": bool(os.environ.get(name)), "required": required} for name in names]
-
-
-def _tool_version() -> str:
-    version_file = REPO_ROOT / "VERSION"
-    if version_file.is_file():
-        return version_file.read_text(encoding="utf-8").strip()
-    return "unknown"
 
 
 def _doc_links():
@@ -53,14 +32,12 @@ def _doc_links():
 
 
 def build_snapshot(*, check_reachability=http_client.check_reachability) -> dict:
-    env_vars = _env_var_status(REQUIRED_ENV_VARS, required=True) + _env_var_status(
-        FUTURE_ENV_VARS, required=False
-    )
+    env_vars = env_info.env_var_status()
     api_key_set = any(v["name"] == "ANTHROPIC_API_KEY" and v["set"] for v in env_vars)
 
     return {
         "generatedAt": datetime.now(timezone.utc).isoformat(),
-        "toolVersion": _tool_version(),
+        "toolVersion": env_info.tool_version(),
         "envVars": env_vars,
         "apiReachable": check_reachability() if api_key_set else None,
         "cliCommands": registry.CLI_COMMANDS,

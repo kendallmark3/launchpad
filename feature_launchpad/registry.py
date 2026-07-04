@@ -71,3 +71,12 @@ STAGES = [
         "status": "not_yet_implemented",
     },
 ]
+
+# Manually maintained, not auto-detected: since Stage 4+ (code scaffolding) doesn't
+# exist, features that got taken all the way to a working implementation were
+# hand-built rather than generated, so there's no reliable way to infer this from
+# the filesystem alone. Record it here so diagnostics.py can report it honestly.
+KNOWN_IMPLEMENTATIONS = {
+    "launchpad-status-dashboard": "feature_launchpad/dashboard.py",
+    "blackjack-game": "blackjack-game/",
+}

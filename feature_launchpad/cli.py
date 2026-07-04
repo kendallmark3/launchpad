@@ -10,7 +10,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from feature_launchpad import env, intent_parser, registry, screen_map, ux_flow
+from feature_launchpad import diagnostics, env, intent_parser, registry, screen_map, ux_flow
 from feature_launchpad.http_client import AnthropicAPIError
 
 STAGE_1, STAGE_2, STAGE_3 = (stage["id"] for stage in registry.STAGES[:3])
@@ -36,6 +36,15 @@ def parse_args(argv):
 
 def _write_run_log(run_dir: Path, run_log: dict) -> None:
     (run_dir / "launchpad-run-log.json").write_text(json.dumps(run_log, indent=2) + "\n", encoding="utf-8")
+
+
+def _write_run_log_and_diagnostics(run_dir: Path, run_log: dict, output_root: Path) -> None:
+    _write_run_log(run_dir, run_log)
+    diagnostics.write(
+        run_log=run_log,
+        output_root=output_root,
+        diagnostics_path=output_root.parent / diagnostics.DIAGNOSTICS_FILENAME,
+    )
 
 
 def main(argv=None) -> int:
@@ -95,7 +104,7 @@ def main(argv=None) -> int:
         flow = ux_flow.generate(normalized.content)
     except AnthropicAPIError as exc:
         record_stage(STAGE_2, "failed", str(exc))
-        _write_run_log(run_dir, run_log)
+        _write_run_log_and_diagnostics(run_dir, run_log, args.output_root)
         print(f"feature-launchpad: Stage 2 (UX flow) failed: {exc}", file=sys.stderr)
         return 1
 
@@ -107,7 +116,7 @@ def main(argv=None) -> int:
         screens = screen_map.generate(normalized.content, flow)
     except (AnthropicAPIError, json.JSONDecodeError) as exc:
         record_stage(STAGE_3, "failed", str(exc))
-        _write_run_log(run_dir, run_log)
+        _write_run_log_and_diagnostics(run_dir, run_log, args.output_root)
         print(f"feature-launchpad: Stage 3 (screen map) failed: {exc}", file=sys.stderr)
         return 1
 
@@ -116,7 +125,7 @@ def main(argv=None) -> int:
     print(f"[3/3] Wrote {run_dir / '03-screen-map.json'}")
 
     run_log["completedAt"] = datetime.now(timezone.utc).isoformat()
-    _write_run_log(run_dir, run_log)
+    _write_run_log_and_diagnostics(run_dir, run_log, args.output_root)
 
     print("\nDone. Stages 4+ (Figma, implementation scaffold, validation, PR) are not implemented — see CLAUDE.md.")
     return 0

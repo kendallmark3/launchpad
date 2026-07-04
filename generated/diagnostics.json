@@ -1,0 +1,160 @@
+{
+  "generatedAt": "2026-07-04T14:31:28.132778+00:00",
+  "toolVersion": "0.4.0",
+  "pipeline": {
+    "stages": [
+      {
+        "id": "01-normalized-intent",
+        "label": "Stage 1 \u2014 Read and Normalize Intent",
+        "description": "Parses an intent file into a normalized field list. No API call.",
+        "status": "implemented"
+      },
+      {
+        "id": "02-ux-flow",
+        "label": "Stage 2 \u2014 Reason About UX Flow",
+        "description": "Calls the Anthropic API to produce a UX flow write-up.",
+        "status": "implemented"
+      },
+      {
+        "id": "03-screen-map",
+        "label": "Stage 3 \u2014 Create Screen Map",
+        "description": "Calls the Anthropic API to produce a JSON screen map.",
+        "status": "implemented"
+      },
+      {
+        "id": "04-figma-generation",
+        "label": "Stage 4 \u2014 Figma Generation",
+        "description": "Not implemented \u2014 the source spec is truncated before this stage is defined.",
+        "status": "not_yet_implemented"
+      },
+      {
+        "id": "05-code-scaffolding",
+        "label": "Stage 5 \u2014 Implementation Scaffolding",
+        "description": "Not implemented \u2014 the source spec is truncated before this stage is defined.",
+        "status": "not_yet_implemented"
+      },
+      {
+        "id": "06-validation",
+        "label": "Stage 6 \u2014 Validation",
+        "description": "Not implemented \u2014 the source spec is truncated before this stage is defined.",
+        "status": "not_yet_implemented"
+      },
+      {
+        "id": "07-pr-creation",
+        "label": "Stage 7 \u2014 PR Creation",
+        "description": "Not implemented \u2014 the source spec is truncated before this stage is defined.",
+        "status": "not_yet_implemented"
+      }
+    ],
+    "cliCommands": [
+      {
+        "name": "feature-launchpad <intent-file>",
+        "description": "Runs Stages 1-3 of the pipeline against an intent file, writing artifacts to generated/feature-launchpad/<feature-name>/."
+      },
+      {
+        "name": "feature-launchpad <intent-file> --output-root <dir>",
+        "description": "Same as above, writing artifacts under a different output directory."
+      },
+      {
+        "name": "python3 -m feature_launchpad.dashboard",
+        "description": "Writes a static, read-only status dashboard (env var / API reachability / capabilities) and opens it in a browser."
+      }
+    ]
+  },
+  "environment": {
+    "envVars": [
+      {
+        "name": "ANTHROPIC_API_KEY",
+        "set": true,
+        "required": true
+      },
+      {
+        "name": "FIGMA_ACCESS_TOKEN",
+        "set": false,
+        "required": false
+      },
+      {
+        "name": "FIGMA_FILE_KEY",
+        "set": false,
+        "required": false
+      },
+      {
+        "name": "FIGMA_TEAM_ID",
+        "set": false,
+        "required": false
+      },
+      {
+        "name": "GITHUB_TOKEN",
+        "set": false,
+        "required": false
+      },
+      {
+        "name": "GITHUB_REPOSITORY",
+        "set": false,
+        "required": false
+      }
+    ],
+    "apiReachable": true
+  },
+  "features": [
+    {
+      "featureName": "blackjack-game",
+      "stagesCompleted": [
+        "01-normalized-intent",
+        "02-ux-flow",
+        "03-screen-map"
+      ],
+      "lastRunAt": "2026-07-03T22:37:23.929726+00:00",
+      "generatedArtifacts": [
+        "01-normalized-intent.md",
+        "02-ux-flow.md",
+        "03-screen-map.json"
+      ],
+      "handWrittenImplementation": "blackjack-game/"
+    },
+    {
+      "featureName": "customer-billing",
+      "stagesCompleted": [
+        "01-normalized-intent",
+        "02-ux-flow",
+        "03-screen-map"
+      ],
+      "lastRunAt": "2026-07-04T14:31:28.132183+00:00",
+      "generatedArtifacts": [
+        "01-normalized-intent.md",
+        "02-ux-flow.md",
+        "03-screen-map.json"
+      ],
+      "handWrittenImplementation": null
+    },
+    {
+      "featureName": "launchpad-status-dashboard",
+      "stagesCompleted": [
+        "01-normalized-intent",
+        "02-ux-flow",
+        "03-screen-map"
+      ],
+      "lastRunAt": "2026-07-03T17:00:09.969525+00:00",
+      "generatedArtifacts": [
+        "01-normalized-intent.md",
+        "02-ux-flow.md",
+        "03-screen-map.json",
+        "dashboard.html",
+        "status-snapshot.json"
+      ],
+      "handWrittenImplementation": "feature_launchpad/dashboard.py"
+    }
+  ],
+  "history": [
+    {
+      "runAt": "2026-07-04T14:31:28.132183+00:00",
+      "featureName": "customer-billing",
+      "stagesCompleted": [
+        "01-normalized-intent",
+        "02-ux-flow",
+        "03-screen-map"
+      ],
+      "status": "success"
+    }
+  ]
+}
